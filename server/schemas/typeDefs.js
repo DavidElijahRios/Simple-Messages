@@ -1,25 +1,38 @@
 const { gql } = require('apollo-server-express');
-
+// import { DateTimeResolver, DateTimeDefinition } from 'graphql-scalars';
+// Flow in my head
+// all user message rooms are stored in db
+// user has message room assigned to them
 const typeDefs = gql`
    type User {
       _id: ID
       name: String!
       email: String!
       password: String!
-      messages: [messages]
+      avatar: String
+      messages: [Messages]
    }
 
+
    type Messages {
-        content: String!
-        userName: String!
-        timestamps: Boolean
+       _id: ID
+       messageText: String!
+       senderId: String!
+       receiverId: String!
+       lastMessage: String
+   }
+
+   type Query {
+      user: [User]
    }
 
    type Mutation {
-    sendMessage()
+    createMessage(messageText: String!, senderId: String!, receiverId: String!, lastMessage: String): Messages
+    createUser(name: String!, email: String!, password: String!, avatar: String,): User
    }
 
 `;
 
-// TODO: how would I put a message to a user?
+// ?Check to see if my models make sense to have message sent to another user
+// ? how would I write mutation to send a message to another user
 module.exports = typeDefs;

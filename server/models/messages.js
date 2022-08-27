@@ -1,15 +1,24 @@
 const { Schema, model } = require('mongoose');
 
 const messageSchema = new Schema({
-    content: {
+    messageText: {
+         type: String,
+         required: true,
+    },
+    senderId: {
         type: String,
         required: true,
     },
-    userName: {
+    receiverId: {
         type: String,
         required: true,
+    },
+    lastMessage: {
+        type: String,
     }, 
-    timestamps: true,
+    // date: {
+    //       type: Date
+    // }
 });
 
 const Messages = model('Messages', messageSchema);

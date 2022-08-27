@@ -1,6 +1,5 @@
 //  need to bring in schema and model from mongoose
 const { Schema, model } = require('mongoose');
-const { Messages } = require('../models');
 const bcrypt = require('bcrypt');
 
 const userSchema = new Schema({
@@ -19,9 +18,17 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true,
-        minlength: 5,
+        minlength: 4,
     },
-    messages: [Messages],
+    avatar: {
+        type: String,
+    },
+    messages: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Messages'
+        }
+    ],
 });
 
 // userSchema.pre('save', async function (next) {

@@ -1,17 +1,46 @@
 // ? do I need to bring in Messages model also? or no because it is being called in the User model?
-const { Users } = require('../models');
+const { User, Messages } = require('../models');
 
 const resolvers = {
     Query: {
-
+        user: async () => {
+            return await User.find({}).populate('messages')
+        }
     },
-    // ? lost on the mutation part and not sure if I would need to $addtoSet?
+    
     Mutation: {
-        createMessage: async () => {
-
+        createMessage: async (parent, args) => {
+             const newMessage = await Messages.create(args);
+             const addToSender = await User.findOneAndUpdate(
+                { _id: args.senderId },
+                {
+                    $addToSet: {
+                       messages: newMessage._id
+                    },
+                },
+                {
+                    new: true,
+                }
+                );
+             const addToReceiver = await User.findOneAndUpdate(
+                { _id: args.receiverId },
+                {
+                    $addToSet: {
+                     messages: newMessage._id
+                    },
+                },
+                {
+                    new: true,
+                }
+                );
+             return newMessage;
         },
+        createUser: async (parent, args) => {
+            const newUser = await User.create(args);
+            return newUser;
+        }
     }
 }
 
-// ? Ask if the utils folder in the src folder queries and mutations are making our calls 
-// ? to the front end? or how would I then display the backend to the front end?
+
+module.exports = resolvers;
