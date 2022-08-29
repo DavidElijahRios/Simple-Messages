@@ -24,6 +24,7 @@ const typeDefs = gql`
 
    type Query {
       user: [User]
+      userMessages(_id: ID!): Messages
    }
 
    type Mutation {

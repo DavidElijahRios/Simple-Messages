@@ -5,6 +5,11 @@ const resolvers = {
     Query: {
         user: async () => {
             return await User.find({}).populate('messages')
+        },
+        userMessages: async (parent, args) => {
+         const messages = await Messages.findById(args._id)
+         console.log(messages)
+         return messages
         }
     },
     
@@ -33,6 +38,7 @@ const resolvers = {
                     new: true,
                 }
                 );
+                console.log(newMessage)
              return newMessage;
         },
         createUser: async (parent, args) => {
